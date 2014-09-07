@@ -1,0 +1,10 @@
+{
+  "mysqlOptions" : {
+      "host" : "localhost",
+      "port" : 3306,
+      "user" : "timezone",
+      "password" : "timezone",
+      "database" : "timezone"
+  },
+  "sessionSecret" : "6rCEsz7RM3"
+}

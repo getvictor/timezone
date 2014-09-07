@@ -4,9 +4,15 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var mysql = require('mysql');
+var SessionStore = require('express-mysql-session');
+var Sequelize = require('sequelize');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var db = require('./models');
+var config = require('./config.json');
 
 var app = express();
 
@@ -20,6 +26,12 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({
+  secret: config.sessionSecret,
+  store: new SessionStore(config.mysqlOptions),
+  resave: true,
+  saveUninitialized: true
+}));
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -56,6 +68,5 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
 
 module.exports = app;
