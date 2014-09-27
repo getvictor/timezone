@@ -84,7 +84,7 @@ router.route('/login').post(function(req, res, next) {
         if (utils.passwordCorrect(req.body.password, result.password)) {
           res.status(200);
           res.json({
-            token: jsonwebtoken.sign(user.id, config.jwtSecretToken, { expiresInMinutes: 60 })
+            token: jsonwebtoken.sign(result.id, config.jwtSecretToken, { expiresInMinutes: 60 })
           });
         } else {
           // Bad password.
