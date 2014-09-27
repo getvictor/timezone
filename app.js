@@ -1,20 +1,16 @@
-// TODO: Removed unused dependencies from here and from package.json
-
 var util = require('util');
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
-var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
-var session = require('express-session');
 var mysql = require('mysql');
-var SessionStore = require('express-mysql-session');
 var Sequelize = require('sequelize');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var timezones = require('./routes/timezones');
 var db = require('./models');
 var config = require('./config.json');
 
@@ -30,18 +26,12 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator());
-app.use(cookieParser());
-app.use(session({
-  secret: config.sessionSecret,
-  store: new SessionStore(config.mysqlOptions),
-  resave: true,
-  saveUninitialized: true
-}));
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/timezones', timezones);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -51,6 +41,14 @@ app.use(function(req, res, next) {
 });
 
 // error handlers
+app.use(function (err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401);
+    res.json({
+      message: 'Invalid authorization token.'
+    });
+  }
+});
 
 // development error handler
 // will print stacktrace

@@ -3,6 +3,7 @@ var router = express.Router();
 var db = require('../models');
 var utils = require('../lib/utils');
 var jsonwebtoken = require('jsonwebtoken');
+var jwt = require('express-jwt');
 var config = require('../config.json');
 
 /**
@@ -37,7 +38,7 @@ router.route('/register').post(function(req, res, next) {
           console.log('Persisted user "' + user.username + '" instance.');
           res.status(201);
           res.json({
-            token: jsonwebtoken.sign(user, config.jwtSecretToken, { expiresInMinutes: 60 })
+            token: jsonwebtoken.sign(user.id, config.jwtSecretToken, { expiresInMinutes: 60 })
           });
         }).error(function(err) {
           utils.handleDbError(res, err);
@@ -83,7 +84,7 @@ router.route('/login').post(function(req, res, next) {
         if (utils.passwordCorrect(req.body.password, result.password)) {
           res.status(200);
           res.json({
-            token: jsonwebtoken.sign(user, config.jwtSecretToken, { expiresInMinutes: 60 })
+            token: jsonwebtoken.sign(user.id, config.jwtSecretToken, { expiresInMinutes: 60 })
           });
         } else {
           // Bad password.
@@ -106,6 +107,19 @@ router.route('/login').post(function(req, res, next) {
     utils.addValidationErrors(res, errors);
   }
 
+});
+
+// The following routers require authorization.
+router.use(jwt({secret: config.jwtSecretToken}));
+
+router.route('/logout').post(function(req, res, next) {
+  // TODO: Clear the json web token.
+  // See: http://www.kdelemme.com/2014/05/12/use-redis-to-revoke-tokens-generated-from-jsonwebtoken/
+  res.status(200);
+  res.json({
+    message: 'Clearing.',
+    user: req.user
+  });
 });
 
 module.exports = router;

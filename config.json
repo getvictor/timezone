@@ -7,6 +7,6 @@
       "password" : "timezone",
       "database" : "timezone"
   },
-  "sessionSecret" : "6rCEsz7RM3",
-  "jwtSecretToken" : "4PyWWWG4Nu"
+  "jwtSecretToken" : "4PyWWWG4Nu",
+  "maxStringLength" : 255
 }
