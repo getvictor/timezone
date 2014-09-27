@@ -1,9 +1,13 @@
+// TODO: Removed unused dependencies from here and from package.json
+
+var util = require('util');
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var expressValidator = require('express-validator');
 var session = require('express-session');
 var mysql = require('mysql');
 var SessionStore = require('express-mysql-session');
@@ -25,6 +29,7 @@ app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(expressValidator());
 app.use(cookieParser());
 app.use(session({
   secret: config.sessionSecret,

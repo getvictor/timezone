@@ -19,6 +19,10 @@
     "express-session": "~1.7.6",
     "bcrypt": "~0.8.0",
     "sequelize": "~1.7.10",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "express-validator": "~2.6.0",
+    "util": "~0.10.3",
+    "express-jwt": "~0.3.2",
+    "jsonwebtoken": "~1.1.2"
   }
 }

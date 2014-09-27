@@ -1,4 +1,5 @@
 {
+  "appTitle" : "Timezone",
   "mysqlOptions" : {
       "host" : "localhost",
       "port" : 3306,
@@ -6,5 +7,6 @@
       "password" : "timezone",
       "database" : "timezone"
   },
-  "sessionSecret" : "6rCEsz7RM3"
+  "sessionSecret" : "6rCEsz7RM3",
+  "jwtSecretToken" : "4PyWWWG4Nu"
 }

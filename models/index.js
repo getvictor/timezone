@@ -18,24 +18,24 @@ var sequelize = new Sequelize(config.mysqlOptions.database, config.mysqlOptions.
 
 fs.readdirSync(__dirname)
   .filter(function(file) {
-    return (file.indexOf('.') !== 0) && (file !== 'index.js')
+    return (file.indexOf('.') !== 0) && (file !== 'index.js');
   })
   .forEach(function(file) {
-    var model = sequelize.import(path.join(__dirname, file))
-    db[model.name] = model
+    var model = sequelize.import(path.join(__dirname, file));
+    db[model.name] = model;
   });
 
 Object.keys(db).forEach(function(modelName) {
   if ('associate' in db[modelName]) {
-    db[modelName].associate(db)
+    db[modelName].associate(db);
   }
 });
 
 sequelize.sync({force: true}).complete(function(err) {
   if (!!err) {
-    console.log('An error occurred while creating the table:', err)
+    console.log('An error occurred while creating the table:', err);
   } else {
-    console.log('Sequelize sync worked!')
+    console.log('Sequelize sync worked!');
   }
 });
 
