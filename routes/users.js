@@ -122,4 +122,6 @@ router.route('/logout').post(function(req, res, next) {
   });
 });
 
+// TODO: Add delete API.
+
 module.exports = router;
