@@ -32,11 +32,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Always use HTTPS in production
 if (app.get('env') === 'production') {
   var ensureSecure = function(req, res, next) {
-    if (req.secure) {
-      // OK, continue
+    if (req.headers['x-forwarded-proto'] === 'http') {
+      res.redirect('https://' + req.headers.host + req.path);
+    } else {
       return next();
     }
-    res.redirect('https://' + req.host + req.url);
   };
 
   app.all('*', ensureSecure);
