@@ -21,7 +21,7 @@ router.route('/').get(function(req, res, next) {
         var unixOffset = moment().valueOf();
         for (var i = 0; i < results.length; i++) {
           results[i] = results[i].toJSON();
-          results[i].currentTime = moment(unixOffset).add(results[i].minutesFromGMT, 'minutes').format('LT');
+          results[i].currentTime = moment(unixOffset).utc().add(results[i].minutesFromGMT, 'minutes').format('LT');
         }
         res.status(200);
         res.json({
