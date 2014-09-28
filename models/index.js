@@ -38,11 +38,14 @@ Object.keys(db).forEach(function(modelName) {
   }
 });
 
-sequelize.sync({force: true}).complete(function(err) {
+// Force DB resync unless we're in production.
+var forceSync = process.env.NODE_ENV === 'production' ? false : true;
+
+sequelize.sync({force: forceSync}).complete(function(err) {
   if (!!err) {
     console.log('An error occurred while creating the table:', err);
   } else {
-    console.log('Sequelize sync worked!');
+    console.log('Sequelize sync worked! ' + (forceSync ? 'DB cleared.' : ''));
   }
 });
 
