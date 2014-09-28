@@ -29,6 +29,19 @@ app.use(expressValidator());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Always use HTTPS in production
+if (app.get('env') === 'production') {
+  var ensureSecure = function(req, res, next) {
+    if (req.secure) {
+      // OK, continue
+      return next();
+    }
+    res.redirect('https://' + req.host + req.url);
+  };
+
+  app.all('*', ensureSecure);
+}
+
 app.use('/', routes);
 app.use('/users', users);
 app.use('/timezones', timezones);

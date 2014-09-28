@@ -10,5 +10,5 @@ app.set('port', server_port);
 
 var server = app.listen(server_port, server_ip_address, null, function() {
   console.log('Express server listening on port ' + server.address().port);
-  console.log('NODE_ENV:' + process.env.NODE_ENV);
+  console.log('env:' + app.get('env'));
 });
