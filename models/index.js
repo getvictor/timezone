@@ -11,10 +11,17 @@ var lodash    = require('lodash');
 var config = require('../config.json');
 var db        = {};
 
-var sequelize = new Sequelize(config.mysqlOptions.database, config.mysqlOptions.user, config.mysqlOptions.password, {
-  // Use a pool of connections for higher performance.
-  pool: {maxConnections: 5, maxIdleTime: 30}
-});
+var sequelize = new Sequelize(
+  config.mysqlOptions.database,
+  process.env.OPENSHIFT_MYSQL_DB_USERNAME || config.mysqlOptions.user,
+  process.env.OPENSHIFT_MYSQL_DB_PASSWORD || config.mysqlOptions.password,
+  {
+    host: process.env.OPENSHIFT_MYSQL_DB_HOST || config.mysqlOptions.host,
+    port: process.env.OPENSHIFT_MYSQL_DB_PORT || config.mysqlOptions.port,
+    // Use a pool of connections for higher performance.
+    pool: {maxConnections: 5, maxIdleTime: 30}
+  }
+);
 
 fs.readdirSync(__dirname)
   .filter(function(file) {
