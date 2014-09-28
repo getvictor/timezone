@@ -3,8 +3,8 @@
   "mysqlOptions" : {
       "host" : "localhost",
       "port" : 3306,
-      "user" : "timezone",
-      "password" : "timezone",
+      "user" : "admint4SVnR7",
+      "password" : "YaVH1MKPzhe7",
       "database" : "timezone"
   },
   "jwtSecretToken" : "4PyWWWG4Nu",
