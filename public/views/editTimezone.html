@@ -1,0 +1,27 @@
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+
+<h4 ng-if="!edit">Add New Timezone</h4>
+<h4 ng-if="edit">Edit Timezone</h4>
+<form role="form">
+  <div class="row">
+    <div class="form-group col-sm-6">
+      <label for="name">Name</label>
+      <input type="text" class="form-control" id="name" placeholder="Name" maxlength="255" ng-model="name">
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-sm-6">
+      <label for="city">City</label>
+      <input type="text" class="form-control" id="city" placeholder="City" maxlength="255" ng-model="city">
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-sm-3">
+      <label for="time">UTC Offset</label>
+      <input type="text" class="form-control" id="time" placeholder="-10:30" maxlength="6" ng-model="time">
+      <p class="help-block">+hh:mm -hh:mm +hhmm -hhmm</p>
+    </div>
+  </div>
+  <button ng-if="!edit" type="submit" class="btn btn-default" ng-click="addTimezone()">Add</button>
+  <button ng-if="edit" type="submit" class="btn btn-default" ng-click="editTimezone()">Edit</button>
+</form>

@@ -21,6 +21,12 @@ timezoneApp.config(function($routeProvider) {
     templateUrl : 'views/timezones.html',
     controller : 'TimezoneController',
     access : { requiredAuthentication: true }
+  }).when('/addTimezone', {
+    redirectTo : '/editTimezone'
+  }).when('/editTimezone', {
+    templateUrl : 'views/editTimezone.html',
+    controller : 'EditTimezoneController',
+    access : { requiredAuthentication: true }
   }).otherwise({
     redirectTo : '/'
   });

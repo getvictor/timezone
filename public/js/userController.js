@@ -42,7 +42,7 @@ appControllers.controller('UserController', function($scope, $location, $window,
         AuthenticationService.isAuthenticated = false;
         delete $window.sessionStorage.token;
         $location.path("/");
-      }).error(function(status, data) {
+      }).error(function(data, status) {
         handleError(data);
       });
     } else {

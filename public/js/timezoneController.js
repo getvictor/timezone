@@ -20,10 +20,26 @@ appControllers.controller('TimezoneController', function($scope, $location, $win
     }
   };
 
+  $scope.TimezoneService = TimezoneService;
+
+  $scope.timezones = [];
   TimezoneService.get().success(function(data) {
     $scope.timezones = data.results;
   }).error(function(data, status) {
     handleError(data);
   });
+
+  $scope.edit = function(timezone) {
+    TimezoneService.setTimezoneToEdit(timezone);
+    $location.url('/editTimezone');
+  };
+
+  $scope.delete = function(index, timezone) {
+    TimezoneService.delete(timezone).success(function(data) {
+      $scope.timezones.splice(index, 1);
+    }).error(function(data, status) {
+      handleError(data);
+    });
+  };
 
 });

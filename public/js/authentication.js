@@ -3,6 +3,7 @@ timezoneApp.config(function($httpProvider) {
 });
 
 appServices.factory('AuthenticationService', function() {
+  // TODO: Use $window.localStorage to store token across browser windows. Refresh token when it is close to expiring.
   var auth = {
     isAuthenticated : false
   };
@@ -21,10 +22,12 @@ appServices.factory('TokenInterceptor', function($q, $window, $location, Authent
     },
 
     requestError : function(rejection) {
+      // Mark the promise as a failed operation.
       return $q.reject(rejection);
     },
 
     // Set Authentication.isAuthenticated to true if 200 received.
+    // Remove this once authentication is held in localStorage.
     response : function(response) {
       if (response !== null && response.status === 200 && $window.sessionStorage.token &&
           !AuthenticationService.isAuthenticated) {
@@ -42,6 +45,7 @@ appServices.factory('TokenInterceptor', function($q, $window, $location, Authent
         $location.path("/login");
       }
 
+      // Mark the promise as a failed operation.
       return $q.reject(rejection);
     }
   };

@@ -57,7 +57,7 @@ exports.addTimezone = function(test) {
 };
 
 exports.getTimezones = function(test) {
-  test.expect(5);
+  test.expect(6);
   rest.get(BASE_URL + '/timezones', {
     headers: {
       Authorization: 'Bearer ' + token
@@ -69,6 +69,7 @@ exports.getTimezones = function(test) {
       test.strictEqual(result.results[0].city, city);
       test.strictEqual(result.results[0].minutesFromGMT, minutesFromGMT);
       test.strictEqual(result.results[0].id, id);
+      test.ok(result.results[0].currentTime);
     } else {
       test.ok(false, result.message);
     }
@@ -155,7 +156,7 @@ exports.deleteTimezone = function(test) {
       Authorization: 'Bearer ' + token
     }
   }).on('complete', function(result, response) {
-    if (response.statusCode === 201) {
+    if (response.statusCode === 200) {
       // Fetch all the timezones to make sure deletion was made.
       rest.get(BASE_URL + '/timezones', {
         headers: {

@@ -5,6 +5,7 @@ var utils = require('../lib/utils');
 var jsonwebtoken = require('jsonwebtoken');
 var jwt = require('express-jwt');
 var config = require('../config.json');
+var moment = require('moment');
 
 // Require authentication.
 router.use(jwt({secret: config.jwtSecretToken}));
@@ -16,6 +17,12 @@ router.route('/').get(function(req, res, next) {
   db.User.find(req.user).success(function(user) {
     if (user) {
       user.getTimezones().success(function(results) {
+        // Populate current time in each result.
+        var unixOffset = moment().valueOf();
+        for (var i = 0; i < results.length; i++) {
+          results[i] = results[i].toJSON();
+          results[i].currentTime = moment(unixOffset).add(results[i].minutesFromGMT, 'minutes').format('LT');
+        }
         res.status(200);
         res.json({
           results: results
@@ -142,7 +149,7 @@ router.route('/:id').delete(function(req, res, next) {
       if (timezone && timezone.UserId === req.user) {
         // Delete the timezone.
         timezone.destroy().success(function(result) {
-          res.status(201);
+          res.status(200);
           res.json({});
         }).error(function(err) {
           utils.handleDbError(res, err);

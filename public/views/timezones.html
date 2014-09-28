@@ -1,23 +1,41 @@
 <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 
-<table class="table table-striped table-condensed">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>City</th>
-      <th>Time</th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="timezone in timezones">
-      <th>{{timezone.name}}</th>
-      <th>{{timezone.city}}</th>
-      <th>{{timezone.minutesFromGMT}}</th>
-      <th>Edit</th>
-      <th>X</th>
-    </tr>
-  </tbody>
-</table>
+<div ng-if="timezones.length == 0">
+  <div class="alert alert-info" role="alert">You have not created any Timezones.</div>
+  <a href="#/addTimezone">Add New Timezone</a>
+</div>
 
+<div ng-if="timezones.length">
+
+  <form role="form">
+    <div class="row">
+      <div class="form-group col-sm-2">
+        <input type="text" class="form-control" placeholder="Name Filter" ng-model="search.name">
+      </div>
+    </div>
+  </form>
+
+  <table class="table table-striped table-condensed">
+    <thead>
+      <tr>
+        <th class="col-sm-3">Name</th>
+        <th class="col-sm-2">City</th>
+        <th class="col-sm-3">Time</th>
+        <th class="col-sm-2">Offset</th>
+        <th class="col-sm-1"></th>
+        <th class="col-sm-1"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="timezone in timezones | filter:search">
+        <td>{{timezone.name}}</td>
+        <td>{{timezone.city}}</td>
+        <td>{{timezone.currentTime}}</td>
+        <td>{{TimezoneService.timezoneStringFromMinutes(timezone.minutesFromGMT)}}</td>
+        <td><button type="button" class="btn btn-xs btn-primary" ng-click="edit(timezone)"><span class="glyphicon glyphicon-pencil"></span></button></td>
+        <td><button type="button" class="btn btn-xs btn-danger" ng-click="delete($index, timezone)"><span class="glyphicon glyphicon-trash"></span></button></td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
