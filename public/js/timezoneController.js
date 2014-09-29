@@ -21,11 +21,14 @@ appControllers.controller('TimezoneController', function($scope, $location, $win
   };
 
   $scope.TimezoneService = TimezoneService;
+  $scope.fetchingTimezones = true;
 
   $scope.timezones = [];
   TimezoneService.get().success(function(data) {
     $scope.timezones = data.results;
+    $scope.fetchingTimezones = false;
   }).error(function(data, status) {
+    $scope.fetchingTimezones = false;
     handleError(data);
   });
 

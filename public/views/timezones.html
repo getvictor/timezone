@@ -1,6 +1,12 @@
 <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 
-<div ng-if="timezones.length == 0">
+<div ng-if="fetchingTimezones" class="row">
+  <div class="col-sm-12">
+    <img class="img-responsive center-block" src="img/loading_spinner_large.gif" alt="Loading...">
+  </div>
+</div>
+
+<div ng-if="!fetchingTimezones && timezones.length == 0">
   <div class="alert alert-info" role="alert">You have not created any Timezones.</div>
   <a href="#/addTimezone">Add New Timezone</a>
 </div>
@@ -9,7 +15,7 @@
 
   <form role="form">
     <div class="row">
-      <div class="form-group col-sm-2">
+      <div class="form-group col-md-3">
         <input type="text" class="form-control" placeholder="Name Filter" ng-model="search.name">
       </div>
     </div>
