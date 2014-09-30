@@ -1,12 +1,14 @@
 <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 
-<h4 ng-if="!edit">Add New Timezone</h4>
-<h4 ng-if="edit">Edit Timezone</h4>
-<form role="form">
+<h3 ng-show="!edit">Add New Timezone</h3>
+<h3 ng-show="edit">Edit Timezone</h3>
+<form role="form" name="form" novalidate>
   <div class="row">
-    <div class="form-group col-sm-6">
+    <div class="form-group col-sm-6" ng-class="{true: 'has-error'}[submitted && form.name.$invalid]">
       <label for="name">Name</label>
-      <input type="text" class="form-control" id="name" placeholder="Name" maxlength="255" ng-model="name">
+      <input type="text" class="form-control" id="name" placeholder="Name" maxlength="255" ng-model="name"
+        name="name" required>
+      <p class="help-block" ng-show="submitted && form.name.$error.required">Required</p>
     </div>
   </div>
   <div class="row">
@@ -16,12 +18,15 @@
     </div>
   </div>
   <div class="row">
-    <div class="form-group col-sm-3">
+    <div class="form-group col-sm-3" ng-class="{true: 'has-error'}[submitted && form.time.$invalid]">
       <label for="time">UTC Offset</label>
-      <input type="text" class="form-control" id="time" placeholder="-10:30" maxlength="6" ng-model="time">
+      <input type="text" class="form-control" id="time" placeholder="-10:30" maxlength="100" ng-model="time"
+        name="time" ng-pattern="/Z|[\+\-]\d\d:?\d\d/gi" required>
       <p class="help-block">+hh:mm -hh:mm +hhmm -hhmm</p>
+      <p class="help-block" ng-show="submitted && form.time.$error.required">Required</p>
+      <p class="help-block" ng-show="submitted && form.time.$error.pattern">Must match pattern</p>
     </div>
   </div>
-  <button ng-if="!edit" type="submit" class="btn btn-default" ng-click="addTimezone()">Add</button>
-  <button ng-if="edit" type="submit" class="btn btn-default" ng-click="editTimezone()">Edit</button>
+  <button ng-show="!edit" type="submit" class="btn btn-default" ng-click="addTimezone()">Add</button>
+  <button ng-show="edit" type="submit" class="btn btn-default" ng-click="editTimezone()">Edit</button>
 </form>

@@ -24,15 +24,20 @@ appControllers.controller('UserController', function($scope, $location, $window,
   $scope.login = function(username, password) {
     // Clear alerts;
     $scope.alerts = [];
+    $scope.submitted = true;
 
-    // TODO: Add front end validation.
-    UserService.login(username, password).success(function(data) {
-      AuthenticationService.isAuthenticated = true;
-      $window.sessionStorage.token = data.token;
-      $location.path("/");
-    }).error(function(data, status) {
-      handleError(data);
-    });
+    if ($scope.form.$valid) {
+
+      // TODO: Add front end validation.
+      UserService.login(username, password).success(function(data) {
+        AuthenticationService.isAuthenticated = true;
+        $window.sessionStorage.token = data.token;
+        $location.path("/");
+      }).error(function(data, status) {
+        handleError(data);
+      });
+    }
+
   };
 
   $scope.logout = function() {
@@ -50,14 +55,13 @@ appControllers.controller('UserController', function($scope, $location, $window,
     }
   };
 
-  $scope.register = function register(username, password, passwordConfirm) {
+  $scope.register = function register(username, password) {
     // Clear alerts;
     $scope.alerts = [];
+    $scope.submitted = true;
 
-    // TODO: Check that passwords match.
-    if (AuthenticationService.isAuthenticated) {
-      $location.path("/");
-    } else {
+    if ($scope.form.$valid) {
+
       UserService.register(username, password).success(function(data) {
         AuthenticationService.isAuthenticated = true;
         $window.sessionStorage.token = data.token;

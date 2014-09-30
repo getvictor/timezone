@@ -2,7 +2,8 @@ var options = {
   apiUrl : ''
 };
 
-var timezoneApp = angular.module('timezoneApp', [ 'ngRoute' , 'appControllers', 'appServices', 'ui.bootstrap']);
+var timezoneApp = angular.module('timezoneApp', [ 'ngRoute' , 'appControllers', 'appServices',
+                                                  'ui.bootstrap', 'ui.validate']);
 
 var appServices = angular.module('appServices', []);
 var appControllers = angular.module('appControllers', []);

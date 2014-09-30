@@ -31,44 +31,52 @@ appControllers.controller('EditTimezoneController', function($scope, $location, 
   }
 
   $scope.addTimezone = function() {
-
     // Clear alerts;
     $scope.alerts = [];
+    $scope.submitted = true;
 
-    // Convert time to minutes
-    var minutes = TimezoneService.timezoneMinutesFromString($scope.time);
-    var timezone = {
-      name: $scope.name,
-      city: $scope.city,
-      minutesFromGMT: minutes
-    };
+    if ($scope.form.$valid) {
 
-    TimezoneService.add(timezone).success(function(data) {
-      $location.path("/");
-    }).error(function(data, status) {
-      handleError(data);
-    });
+      // Convert time to minutes
+      var minutes = TimezoneService.timezoneMinutesFromString($scope.time);
+      var timezone = {
+        name: $scope.name,
+        city: $scope.city,
+        minutesFromGMT: minutes
+      };
+
+      TimezoneService.add(timezone).success(function(data) {
+        $location.path("/");
+      }).error(function(data, status) {
+        handleError(data);
+      });
+
+    }
   };
 
   $scope.editTimezone = function() {
-
     // Clear alerts;
     $scope.alerts = [];
+    $scope.submitted = true;
 
-    // Convert time to minutes
-    var minutes = TimezoneService.timezoneMinutesFromString($scope.time);
-    var timezone = {
-      name: $scope.name,
-      city: $scope.city,
-      minutesFromGMT: minutes,
-      id : timezoneToEdit.id
-    };
+    if ($scope.form.$valid) {
 
-    TimezoneService.edit(timezone).success(function(data) {
-      $location.path("/");
-    }).error(function(data, status) {
-      handleError(data);
-    });
+      // Convert time to minutes
+      var minutes = TimezoneService.timezoneMinutesFromString($scope.time);
+      var timezone = {
+        name: $scope.name,
+        city: $scope.city,
+        minutesFromGMT: minutes,
+        id : timezoneToEdit.id
+      };
+
+      TimezoneService.edit(timezone).success(function(data) {
+        $location.path("/");
+      }).error(function(data, status) {
+        handleError(data);
+      });
+
+    }
   };
 
 });
