@@ -1,24 +1,8 @@
-appControllers.controller('TimezoneController', function($scope, $location, $window, AuthenticationService, TimezoneService) {
+appControllers.controller('TimezoneController', function($scope, $location, $window,
+    AuthenticationService, TimezoneService, AlertsService) {
 
-  $scope.alerts = [];
-
-  $scope.closeAlert = function(index) {
-    $scope.alerts.splice(index, 1);
-  };
-
-  var handleError = function(data) {
-    if (data.message) {
-      $scope.alerts.push({
-        type: 'danger',
-        msg: data.message
-      });
-    } else {
-      $scope.alerts.push({
-        type: 'danger',
-        msg: 'Could not complete request.'
-      });
-    }
-  };
+  $scope.AlertsService = AlertsService;
+  AlertsService.clearAll();
 
   $scope.TimezoneService = TimezoneService;
   $scope.fetchingTimezones = true;
@@ -29,7 +13,7 @@ appControllers.controller('TimezoneController', function($scope, $location, $win
     $scope.fetchingTimezones = false;
   }).error(function(data, status) {
     $scope.fetchingTimezones = false;
-    handleError(data);
+    AlertsService.error(data);
   });
 
   $scope.edit = function(timezone) {
@@ -41,7 +25,7 @@ appControllers.controller('TimezoneController', function($scope, $location, $win
     TimezoneService.delete(timezone).success(function(data) {
       $scope.timezones.splice(index, 1);
     }).error(function(data, status) {
-      handleError(data);
+      AlertsService.error(data);
     });
   };
 

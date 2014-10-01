@@ -1,25 +1,8 @@
-appControllers.controller('EditTimezoneController', function($scope, $location, $window, AuthenticationService, TimezoneService) {
+appControllers.controller('EditTimezoneController', function($scope, $location, $window,
+    AuthenticationService, TimezoneService, AlertsService) {
 
-  $scope.alerts = [];
-
-  // TODO: Put alert-handling code into its own service.
-  $scope.closeAlert = function(index) {
-    $scope.alerts.splice(index, 1);
-  };
-
-  var handleError = function(data) {
-    if (data.message) {
-      $scope.alerts.push({
-        type: 'danger',
-        msg: data.message
-      });
-    } else {
-      $scope.alerts.push({
-        type: 'danger',
-        msg: 'Could not complete request.'
-      });
-    }
-  };
+  $scope.AlertsService = AlertsService;
+  AlertsService.clearAll();
 
   var timezoneToEdit = TimezoneService.getTimezoneToEdit();
   if (timezoneToEdit) {
@@ -31,8 +14,7 @@ appControllers.controller('EditTimezoneController', function($scope, $location, 
   }
 
   $scope.addTimezone = function() {
-    // Clear alerts;
-    $scope.alerts = [];
+    AlertsService.clearAll();
     $scope.submitted = true;
 
     if ($scope.form.$valid) {
@@ -48,15 +30,14 @@ appControllers.controller('EditTimezoneController', function($scope, $location, 
       TimezoneService.add(timezone).success(function(data) {
         $location.path("/");
       }).error(function(data, status) {
-        handleError(data);
+        AlertsService.error(data);
       });
 
     }
   };
 
   $scope.editTimezone = function() {
-    // Clear alerts;
-    $scope.alerts = [];
+    AlertsService.clearAll();
     $scope.submitted = true;
 
     if ($scope.form.$valid) {
@@ -73,7 +54,7 @@ appControllers.controller('EditTimezoneController', function($scope, $location, 
       TimezoneService.edit(timezone).success(function(data) {
         $location.path("/");
       }).error(function(data, status) {
-        handleError(data);
+        AlertsService.error(data);
       });
 
     }

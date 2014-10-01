@@ -88,14 +88,14 @@ router.route('/login').post(function(req, res, next) {
           });
         } else {
           // Bad password.
-          res.status(400);
+          res.status(401);
           res.json({
             message: 'Password incorrect.'
           });
         }
       } else {
         // Bad username.
-        res.status(400);
+        res.status(401);
         res.json({
           message: 'Username incorrect.'
         });

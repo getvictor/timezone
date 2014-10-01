@@ -1,40 +1,23 @@
-appControllers.controller('UserController', function($scope, $location, $window, UserService, AuthenticationService) {
+appControllers.controller('UserController', function($scope, $location, $window,
+    UserService, AuthenticationService, AlertsService) {
 
-  $scope.alerts = [];
-
-  $scope.closeAlert = function(index) {
-    $scope.alerts.splice(index, 1);
-  };
-
-  var handleError = function(data) {
-    if (data.message) {
-      $scope.alerts.push({
-        type: 'danger',
-        msg: data.message
-      });
-    } else {
-      $scope.alerts.push({
-        type: 'danger',
-        msg: 'Could not complete request.'
-      });
-    }
-  };
+  $scope.AlertsService = AlertsService;
+  AlertsService.clearAll();
 
   // User Controller -- register, login, logout
   $scope.login = function(username, password) {
-    // Clear alerts;
-    $scope.alerts = [];
+    // Clear alerts.
+    AlertsService.clearAll();
     $scope.submitted = true;
 
     if ($scope.form.$valid) {
 
-      // TODO: Add front end validation.
       UserService.login(username, password).success(function(data) {
         AuthenticationService.isAuthenticated = true;
         $window.sessionStorage.token = data.token;
         $location.path("/");
       }).error(function(data, status) {
-        handleError(data);
+        AlertsService.error(data);
       });
     }
 
@@ -48,7 +31,7 @@ appControllers.controller('UserController', function($scope, $location, $window,
         delete $window.sessionStorage.token;
         $location.path("/");
       }).error(function(data, status) {
-        handleError(data);
+        AlertsService.error(data);
       });
     } else {
       $location.path("/login");
@@ -57,7 +40,7 @@ appControllers.controller('UserController', function($scope, $location, $window,
 
   $scope.register = function register(username, password) {
     // Clear alerts;
-    $scope.alerts = [];
+    AlertsService.clearAll();
     $scope.submitted = true;
 
     if ($scope.form.$valid) {
@@ -67,7 +50,7 @@ appControllers.controller('UserController', function($scope, $location, $window,
         $window.sessionStorage.token = data.token;
         $location.path("/");
       }).error(function(data, status) {
-        handleError(data);
+        AlertsService.error(data);
       });
     }
   };
