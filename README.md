@@ -40,8 +40,7 @@ Review/edit `config.json`
 
 ## Deployment
 
-`npm install`
-`npm start`
+`npm install && npm start`
 
 Note: when starting up, the dev deployment clears the DB.
 
