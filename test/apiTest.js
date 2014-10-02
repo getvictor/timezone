@@ -145,8 +145,6 @@ exports.updateTimezone = function(test) {
 
 };
 
-// TODO: Test updating another user's timezone.
-
 exports.deleteTimezone = function(test) {
 
   rest.del(BASE_URL + '/timezones/' + id, {

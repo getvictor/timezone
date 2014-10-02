@@ -1,10 +1,10 @@
 {
-  "appTitle" : "Timezones",
+  "appTitle" : "Timezone",
   "mysqlOptions" : {
       "host" : "localhost",
       "port" : 3306,
-      "user" : "admint4SVnR7",
-      "password" : "YaVH1MKPzhe7",
+      "user" : "timezone",
+      "password" : "timezone",
       "database" : "timezone"
   },
   "jwtSecretToken" : "4PyWWWG4Nu",

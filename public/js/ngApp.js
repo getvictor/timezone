@@ -15,19 +15,22 @@ timezoneApp.config(function($routeProvider) {
   when('/register', {
     templateUrl : 'views/register.html',
     controller : 'UserController',
-    access : { requiredAuthentication: false }
+    access : { requiredAuthentication: false },
+    title : 'Register'
   }).
   // Login user.
   when('/login', {
     templateUrl : 'views/login.html',
     controller : 'UserController',
-    access : { requiredAuthentication: false }
+    access : { requiredAuthentication: false },
+    title : 'Login'
   }).
   // Show timezones.
   when('/', {
     templateUrl : 'views/timezones.html',
     controller : 'TimezoneController',
-    access : { requiredAuthentication: true }
+    access : { requiredAuthentication: true },
+    title : 'Home'
   }).
   // Add timezone.
   when('/addTimezone', {
@@ -37,7 +40,8 @@ timezoneApp.config(function($routeProvider) {
   when('/editTimezone', {
     templateUrl : 'views/editTimezone.html',
     controller : 'EditTimezoneController',
-    access : { requiredAuthentication: true }
+    access : { requiredAuthentication: true },
+    title : 'Edit Timezone'
   }).
   // Go to timezone page.
   otherwise({
@@ -46,7 +50,11 @@ timezoneApp.config(function($routeProvider) {
 });
 
 timezoneApp.run(function($rootScope, $location, $window, AuthenticationService) {
+  $rootScope.APP_TITLE = APP_TITLE;
+
   $rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
+    // Update page title.
+    $rootScope.pageTitle = nextRoute.title;
 
     // Redirect to the login page if not authenticated.
     if (nextRoute && nextRoute.access) {
