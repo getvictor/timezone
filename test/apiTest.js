@@ -22,8 +22,6 @@ exports.registerUser = function(test){
 
 };
 
-// TODO: Logout, make sure authorization no longer works, and log back in
-
 var name = 'TimezoneName';
 var city = 'Timezone City';
 var minutesFromGMT = 10;

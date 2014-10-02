@@ -1,3 +1,6 @@
+/**
+ * Service for persisting and formatting timezones.
+ */
 appServices.factory('TimezoneService', function($http) {
 
   var timezoneToEdit;
@@ -70,18 +73,17 @@ appServices.factory('TimezoneService', function($http) {
         result += '+';
       }
       var hours = Math.floor(minutes / 60);
-      if (hours < 10) {
-        result += '0' + hours;
-      } else {
-        result += hours;
-      }
+
+      var padZero = function(value) {
+        if (value < 10) {
+          return '0' + value;
+        } else {
+          return value;
+        }
+      };
+      result += padZero(hours);
       result += ':';
-      minutes = minutes % 60;
-      if (minutes < 10) {
-        result += '0' + minutes;
-      } else {
-        result += minutes;
-      }
+      result += padZero(minutes % 60);
       return result;
     }
 

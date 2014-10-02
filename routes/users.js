@@ -65,7 +65,8 @@ router.route('/register').post(function(req, res, next) {
  * Log in a user.
  * Response codes:
  * 200: Success
- * 400: Username/password incorrect, or validation errors.
+ * 400: Validation errors.
+ * 401: Username/password incorrect
  */
 router.route('/login').post(function(req, res, next) {
 
@@ -109,19 +110,33 @@ router.route('/login').post(function(req, res, next) {
 
 });
 
-// The following routers require authorization.
+//The following routers require authorization.
 router.use(jwt({secret: config.jwtSecretToken}));
 
-router.route('/logout').post(function(req, res, next) {
-  // TODO: Clear the json web token.
-  // See: http://www.kdelemme.com/2014/05/12/use-redis-to-revoke-tokens-generated-from-jsonwebtoken/
-  res.status(200);
-  res.json({
-    message: 'Clearing.',
-    user: req.user
-  });
-});
+/**
+ * Refresh user's token.
+ * Response codes:
+ * 200: Success
+ * 400: User corresponding to token cannot be found.
+ */
+router.route('/refresh').post(function(req, res, next) {
 
-// TODO: Add delete API.
+  db.User.find(req.user).success(function(user) {
+    if (user) {
+      res.status(200);
+      res.json({
+        token: jsonwebtoken.sign(req.user, config.jwtSecretToken, { expiresInMinutes: 60 })
+      });
+    } else {
+      res.status(400);
+      res.json({
+        message: 'User with id:' + req.user + 'cannot be found.'
+      });
+    }
+  }).error(function(err) {
+    utils.handleDbError(res, err);
+  });
+
+});
 
 module.exports = router;

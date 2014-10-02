@@ -1,4 +1,7 @@
-appServices.factory('UserService', function($http, $window, AuthenticationService) {
+/**
+ * Service for interfacing with the user API.
+ */
+appServices.factory('UserService', function($http, AuthenticationService) {
   return {
     login : function(username, password) {
       return $http.post(options.apiUrl + '/users/login', {
@@ -8,9 +11,7 @@ appServices.factory('UserService', function($http, $window, AuthenticationServic
     },
 
     logout : function() {
-      AuthenticationService.isAuthenticated = false;
-      delete $window.sessionStorage.token;
-      // return $http.get(options.apiUrl + '/users/logout');
+      AuthenticationService.clearToken();
     },
 
     register : function(username, password) {

@@ -1,5 +1,8 @@
-appControllers.controller('EditTimezoneController', function($scope, $location, $window,
-    AuthenticationService, TimezoneService, AlertsService) {
+/**
+ * Controller for the Add/Edit Timezone views.
+ */
+appControllers.controller('EditTimezoneController', function($scope, $location,
+    TimezoneService, AlertsService) {
 
   $scope.AlertsService = AlertsService;
   AlertsService.clearAll();

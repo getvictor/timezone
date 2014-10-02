@@ -1,22 +1,35 @@
-timezoneApp.config(function($httpProvider) {
-  $httpProvider.interceptors.push('TokenInterceptor');
-});
+/**
+ * Service responsible for storing authentication state.
+ */
+appServices.factory('AuthenticationService', function($window) {
 
-appServices.factory('AuthenticationService', function() {
-  // TODO: Use $window.localStorage to store token across browser windows. Refresh token when it is close to expiring.
-  var auth = {
-    isAuthenticated : false
+  return {
+    isAuthenticated: function() {
+      return !!$window.localStorage.token;
+    },
+    setToken: function(token) {
+      $window.localStorage.token = token;
+    },
+    getToken: function() {
+      return $window.localStorage.token;
+    },
+    clearToken: function() {
+      delete $window.localStorage.token;
+    }
   };
 
-  return auth;
 });
 
-appServices.factory('TokenInterceptor', function($q, $window, $location, AuthenticationService) {
+/**
+ * Interceptor service that injects authentication tokens into requests.
+ */
+appServices.factory('TokenInterceptor', function($q, $location, AuthenticationService) {
   return {
+
     request : function(config) {
       config.headers = config.headers || {};
-      if ($window.sessionStorage.token) {
-        config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token;
+      if (AuthenticationService.isAuthenticated()) {
+        config.headers.Authorization = 'Bearer ' + AuthenticationService.getToken();
       }
       return config;
     },
@@ -26,22 +39,10 @@ appServices.factory('TokenInterceptor', function($q, $window, $location, Authent
       return $q.reject(rejection);
     },
 
-    // Set Authentication.isAuthenticated to true if 200 received.
-    // Remove this once authentication is held in localStorage.
-    response : function(response) {
-      if (response !== null && response.status === 200 && $window.sessionStorage.token &&
-          !AuthenticationService.isAuthenticated) {
-        AuthenticationService.isAuthenticated = true;
-      }
-      return response || $q.when(response);
-    },
-
     // Revoke client authentication if 401 is received.
     responseError : function(rejection) {
-      if (rejection !== null && rejection.status === 401 &&
-          ($window.sessionStorage.token || AuthenticationService.isAuthenticated)) {
-        delete $window.sessionStorage.token;
-        AuthenticationService.isAuthenticated = false;
+      if (rejection !== null && rejection.status === 401) {
+        AuthenticationService.clearToken();
         $location.path("/login");
       }
 
@@ -49,4 +50,35 @@ appServices.factory('TokenInterceptor', function($q, $window, $location, Authent
       return $q.reject(rejection);
     }
   };
+});
+
+timezoneApp.config(function($httpProvider) {
+  $httpProvider.interceptors.push('TokenInterceptor');
+});
+
+/**
+ * Refresh authentication token, if one exists.
+ */
+timezoneApp.run(function($http, $location, AuthenticationService) {
+
+  // Refresh token once every 55 minutes.
+  var refreshInterval = 55 * 60 * 1000;
+
+  // Refresh user's token while user is authenticated.
+  var tokenRefresh = function() {
+    if (AuthenticationService.isAuthenticated()) {
+      $http.post(options.apiUrl + '/users/refresh').success(function(data) {
+        // If token was deleted while request was outstanding, then don't set it.
+        if (AuthenticationService.isAuthenticated()) {
+          AuthenticationService.setToken(data.token);
+        }
+      }).error(function() {
+        AuthenticationService.clearToken();
+        $location.path('/login');
+      });
+    }
+  };
+
+  tokenRefresh();
+  setInterval(tokenRefresh, refreshInterval);
 });

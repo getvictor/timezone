@@ -1,3 +1,6 @@
+/**
+ * Service for handling pop-up ui.bootstrap alerts.
+ */
 appServices.factory('AlertsService', function() {
 
   var alerts = [];

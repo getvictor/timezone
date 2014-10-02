@@ -1,7 +1,11 @@
-appControllers.controller('NavbarController', function($scope, $location, $window, UserService, AuthenticationService) {
+/**
+ * Controller for the navigation bar.
+ */
+appControllers.controller('NavbarController', function($scope, $location,
+    UserService, AuthenticationService) {
 
   $scope.isAuthenticated = function() {
-    return AuthenticationService.isAuthenticated && $window.sessionStorage.token;
+    return AuthenticationService.isAuthenticated();
   };
 
   $scope.urlMatches = function(url) {
